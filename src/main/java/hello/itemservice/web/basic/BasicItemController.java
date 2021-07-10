@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -63,12 +64,34 @@ public class BasicItemController {
         itemRepository.save(item);
         return "basic/item";
     }
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String addItemV4(Item item){//요청파라미터를 가져올 때 파라미터가 객체이면 @ModelAttribute 생략 가능하다!
         itemRepository.save(item);
         return "basic/item";
     }
-    
+    //@PostMapping("/add")
+    public String addItemV5(Item item){//요청파라미터를 가져올 때 파라미터가 객체이면 @ModelAttribute 생략 가능하다!
+        itemRepository.save(item);
+        return "redirect:/basic/items/"+item.getId();
+    }
+    @PostMapping("/add")
+    public String addItemV6(Item item, RedirectAttributes redirectAttributes){//요청파라미터를 가져올 때 파라미터가 객체이면 @ModelAttribute 생략 가능하다!
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId",savedItem.getId());
+        redirectAttributes.addAttribute("status",true);//status가 true이면 저장이 되서 넘어온 것!
+        return "redirect:/basic/items/{itemId}";
+    }
+    @GetMapping("/{itemId}/edit")
+    public String editForm(@PathVariable Long itemId,Model model){
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item",item);//뷰에 전달할 객체 item!
+        return "basic/editForm";//editForm 페이지로 데이터 전달한다!
+    }
+    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item){
+        itemRepository.update(itemId,item);
+        return "redirect:/basic/items/{itemId}";
+    }
     //테스트용 데이터
     @PostConstruct//초기화 자동 콜백함수:생성자 주입이 완료된후 실행된다.
     public void init(){
