@@ -6,9 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -32,8 +30,14 @@ public class BasicItemController {
 //        return "basic/item_practice";
         return "basic/item";
     }
+    //같은 url에 대해 get 들어오면 그냥 페이지만 보여주는 addForm 메서드 호출
     @GetMapping("/add")
     public String addForm(){
+        return "basic/addForm";
+    }
+    //같은 url에 대해 post 방식 들어오면 저장하는 save 메서드 호출
+    @PostMapping("/add")
+    public String save(){
         return "basic/addForm";
     }
     //테스트용 데이터
