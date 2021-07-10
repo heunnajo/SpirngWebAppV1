@@ -29,10 +29,13 @@ public class BasicItemController {
     public String item(@PathVariable long itemId, Model model){
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item",item);
-        return "basic/item_practice";
-//        return "basic/item";
+//        return "basic/item_practice";
+        return "basic/item";
     }
-
+    @GetMapping("/add")
+    public String addForm(){
+        return "basic/addForm";
+    }
     //테스트용 데이터
     @PostConstruct//초기화 자동 콜백함수:생성자 주입이 완료된후 실행된다.
     public void init(){
