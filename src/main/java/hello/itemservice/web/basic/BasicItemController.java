@@ -36,10 +36,39 @@ public class BasicItemController {
         return "basic/addForm";
     }
     //같은 url에 대해 post 방식 들어오면 저장하는 save 메서드 호출
-    @PostMapping("/add")
-    public String save(){
-        return "basic/addForm";
+    //@PostMapping("/add")
+    public String addItemV1(@RequestParam String itemName,
+                       @RequestParam int price,
+                       @RequestParam Integer quantity,
+                       Model model){
+        Item item = new Item();
+        item.setItemName(itemName);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+
+        itemRepository.save(item);
+        model.addAttribute("item",item);//상품 저장 후 상세 페이지 보여준다.
+        return "basic/item";
     }
+    //@PostMapping("/add")
+    public String addItemV2(@ModelAttribute("item") Item item){
+        itemRepository.save(item);
+        //model.addAttribute("item",item);//자동 추가, 생략 가능
+        return "basic/item";
+    }
+    //@PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item){
+        //클래스명에서 앞글자만 소문자로 바꾼 것이 ModelAttribute 이름이 된다.
+        //그래서 @ModelAttribute("item") 에서 괄호를 빼도 클래스명의 앞글자만 소문자인 것.
+        itemRepository.save(item);
+        return "basic/item";
+    }
+    @PostMapping("/add")
+    public String addItemV4(Item item){//요청파라미터를 가져올 때 파라미터가 객체이면 @ModelAttribute 생략 가능하다!
+        itemRepository.save(item);
+        return "basic/item";
+    }
+    
     //테스트용 데이터
     @PostConstruct//초기화 자동 콜백함수:생성자 주입이 완료된후 실행된다.
     public void init(){
