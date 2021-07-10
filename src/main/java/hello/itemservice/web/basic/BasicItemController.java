@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.PostConstruct;
@@ -24,11 +25,19 @@ public class BasicItemController {
         model.addAttribute("items",items);
         return "basic/items";
     }
+    @GetMapping("/{itemId}")//경로 변수 설정
+    public String item(@PathVariable long itemId, Model model){
+        Item item = itemRepository.findById(itemId);
+        model.addAttribute("item",item);
+        return "basic/item_practice";
+//        return "basic/item";
+    }
+
     //테스트용 데이터
     @PostConstruct//초기화 자동 콜백함수:생성자 주입이 완료된후 실행된다.
     public void init(){
-        itemRepository.save(new Item("itemA",10000,10));
-        itemRepository.save(new Item("itemB",20000,20));
+        itemRepository.save(new Item("chicken",10000,10));
+        itemRepository.save(new Item("pizza",20000,20));
     }
 
 //    @Autowired생성자가 하나기 때문에 생략가능!
